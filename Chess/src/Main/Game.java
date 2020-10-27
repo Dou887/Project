@@ -8,7 +8,7 @@ public class Game {
     }
     public void create(){
         Board board = new Board();
-        ChessViewer viewer = new ChessViewer();
+        ChessComponent viewer = new ChessComponent(board);
     }
 
 

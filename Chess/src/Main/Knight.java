@@ -9,6 +9,6 @@ public class Knight extends AbstractPiece {
     }
 
     public PieceType type(){
-        return PieceType.Knight;
+        return PieceType.KNIGHT;
     }
 }

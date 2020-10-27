@@ -10,7 +10,7 @@ public class Bishop extends AbstractPiece {
     }
 
     public PieceType type(){
-        return PieceType.Bishop;
+        return PieceType.BISHOP;
     }
 
 }

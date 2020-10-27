@@ -9,6 +9,6 @@ public class Rook extends AbstractPiece {
     }
 
     public PieceType type(){
-        return PieceType.Rook;
+        return PieceType.ROOK;
     }
 }

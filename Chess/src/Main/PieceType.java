@@ -1,5 +1,5 @@
 package Main;
 
 public enum PieceType {
-    Pawn, King, Queen, Rook, Bishop, Knight, EMPTY;
+    PAWN, KING, QUEEN, ROOK, BISHOP, KNIGHT, EMPTY;
 }

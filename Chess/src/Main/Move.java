@@ -8,9 +8,7 @@ public class Move {
         this.board = board;
     }
 
-    public void castling(){
 
-    }
 
     public void pathBlocked(){
 

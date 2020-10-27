@@ -6,7 +6,7 @@ public class Pawn extends AbstractPiece{
         super(pieceColor,x,y,moved);
     }
     public PieceType type(){
-        return PieceType.Pawn;
+        return PieceType.PAWN;
     }
     public boolean isValidMove(){
         return false;

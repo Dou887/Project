@@ -29,11 +29,11 @@ public class PieceSet {
         listOfPieces.add(new Knight(WHITE,1,7,false));
         listOfPieces.add(new Knight(WHITE,6,7,false));
 
-        listOfPieces.add(new Queen(BLACK,4,0,false));
-        listOfPieces.add(new King(BLACK,5,0,false));
+        listOfPieces.add(new Queen(BLACK,3,0,false));
+        listOfPieces.add(new King(BLACK,4,0,false));
 
-        listOfPieces.add(new Queen(WHITE,4,7,false));
-        listOfPieces.add(new King(WHITE,5,7,false));
+        listOfPieces.add(new Queen(WHITE,3,7,false));
+        listOfPieces.add(new King(WHITE,4,7,false));
 
         for(int x = 0; x<8;x++){
             listOfPieces.add(new Pawn(BLACK,x,1,false));

@@ -36,7 +36,17 @@ public abstract class AbstractPiece implements Piece{
     }
 
     @Override
-    public PieceColor getPieceColor() {
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    @Override
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    @Override
+    public PieceColor color() {
         return pieceColor;
     }
 }

@@ -11,6 +11,6 @@ public class Queen extends AbstractPiece {
         return false;
     }
     public PieceType type(){
-        return PieceType.Queen;
+        return PieceType.QUEEN;
     }
 }

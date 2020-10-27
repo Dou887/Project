@@ -9,7 +9,7 @@ public class King extends AbstractPiece {
         return false;
     }
     public PieceType type(){
-        return PieceType.King;
+        return PieceType.KING;
     }
 
 }
