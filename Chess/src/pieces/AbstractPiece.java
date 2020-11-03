@@ -1,6 +1,12 @@
-package Main;
+package pieces;
 
-public abstract class AbstractPiece implements Piece{
+import main.Board;
+
+import java.awt.*;
+
+import static pieces.PieceColor.NONE;
+
+public abstract class AbstractPiece implements Piece {
 
     protected int x;
     protected int y;
@@ -13,6 +19,14 @@ public abstract class AbstractPiece implements Piece{
         this.y = y;
         this.pieceColor = pieceColor;
         this.moved = moved;
+    }
+
+    public boolean isEnemy(Board board, Point endSquare){
+        if(pieceColor!= board.getColorAt(endSquare.x, endSquare.y) &&
+                board.getColorAt(endSquare.x, endSquare.y) != NONE){
+            return true;
+        }
+        return false;
     }
 
     @Override

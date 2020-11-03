@@ -1,4 +1,4 @@
-package Main;
+package pieces;
 
 public class Queen extends AbstractPiece {
 
@@ -7,8 +7,10 @@ public class Queen extends AbstractPiece {
         super(pieceColor,x,y,moved);
 
     }
-    public boolean isValidMove(){
-        return false;
+    public boolean isValidMove(int newX, int newY ){
+        int deltaX = Math.abs(x - newX);
+        int deltaY = Math.abs(y - newY);
+        return ((x == newX) ^ (y == newY)) || deltaX == deltaY;
     }
     public PieceType type(){
         return PieceType.QUEEN;
