@@ -1,6 +1,5 @@
 package pieces;
 
-import main.Board;
 import java.awt.*;
 
 public class King extends AbstractPiece {

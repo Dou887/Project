@@ -1,16 +1,10 @@
 package pieces;
 
-import main.Board;
-
-import java.awt.*;
-
-import static pieces.PieceColor.NONE;
-
 public abstract class AbstractPiece implements Piece {
 
     protected int x;
     protected int y;
-    protected PieceColor pieceColor;
+    protected final PieceColor pieceColor;
     protected boolean moved;
     protected PieceType pieceType;
 

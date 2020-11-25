@@ -1,7 +1,5 @@
 package pieces;
 
-import main.Board;
-
 import java.awt.*;
 
 public class Rook extends AbstractPiece {

@@ -15,12 +15,11 @@ import static pieces.PieceColor.WHITE;
 public class Game {
 
     private final List<Move> movesPlayed;
-    private Player[] players;
+    private final Player[] players;
     private Player playerInTurn;
     private Board board;
 
     public Game() {
-        this.board = board;
         this.movesPlayed = new ArrayList<>();
         this.players = new Player[2];
         board = new Board();

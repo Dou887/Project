@@ -1,11 +1,8 @@
 package pieces;
 
-import main.Board;
-
 import java.awt.*;
 
 import static pieces.PieceColor.BLACK;
-import static pieces.PieceColor.NONE;
 
 public class Pawn extends AbstractPiece {
 

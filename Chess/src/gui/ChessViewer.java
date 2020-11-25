@@ -1,6 +1,5 @@
 package gui;
 
-import main.Board;
 import main.Game;
 
 import javax.swing.*;
@@ -13,8 +12,7 @@ public class ChessViewer implements MouseListener {
     private final JFrame frame;
     private final ChessComponent chessComponent;
     private final FrontPage frontPage;
-    private final int mode = 0;
-    private Game game;
+    private final Game game;
     private Point startSquare = null;
     private Point endSquare = null;
 
@@ -26,7 +24,8 @@ public class ChessViewer implements MouseListener {
         this.game = game;
     }
     public void show(){
-        if(mode==0) {
+        int mode = 0;
+        if(mode ==0) {
             frame.setLayout(new BorderLayout());
             frame.add(chessComponent, BorderLayout.CENTER);
             frame.pack();
