@@ -13,41 +13,67 @@ public class Pawn extends AbstractPiece {
         super(pieceColor,x,y,moved);
     }
 
+    @Override
+    public void setMoved() {
+        super.setMoved();
+    }
+
     public PieceType type(){
         return PieceType.PAWN;
     }
 
-    public boolean isValidMove(Board board, Point endSquare, Boolean enPassant){
-        if(board.isEmpty(endSquare.x, endSquare.y)){
-            return enPassant ? canAttack(endSquare) :
-                    // Normal moves when enSquare is empty
-                    moved ? pieceColor == BLACK ? endSquare.x == x && endSquare.y - y < 3 :
-                    endSquare.x == x && y - endSquare.y < 3 :
-                    pieceColor == BLACK ? endSquare.x == x && endSquare.y - y == 1 :
-                    endSquare.x == x && y - endSquare.y == 1;
-        }
-        else if(isEnemy(board, endSquare)){
-                return canAttack(endSquare);
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isEnemy(Board board, Point endSquare) {
-        return super.isEnemy(board, endSquare);
-    }
-
-    public boolean canAttack(Point endSquare){
-        int deltaX = Math.abs(x - endSquare.x);
-        return pieceColor==BLACK ? endSquare.y==y+1 && deltaX==1 : endSquare.y==y-1 && deltaX==1;
-    }
 
     public boolean moved(){
         return moved;
     }
 
+    @Override
+    public boolean isValidMove(Point endSquare) {
+        return !moved ? pieceColor == BLACK ? endSquare.x == x && endSquare.y - y < 3 :
+                endSquare.x == x && y - endSquare.y < 3 :
+                pieceColor == BLACK ? endSquare.x == x && endSquare.y - y == 1 :
+                        endSquare.x == x && y - endSquare.y == 1;
+    }
+
+    @Override
+    public int getX() {
+        return super.getX();
+    }
+
+    @Override
+    public int getY() {
+        return super.getY();
+    }
+
+    @Override
+    public void setX(int x) {
+        super.setX(x);
+    }
+
+    @Override
+    public void setY(int y) {
+        super.setY(y);
+    }
+
+    @Override
+    public PieceColor color() {
+        return super.color();
+    }
+
     public boolean isPromoting(){
+        if(this.pieceColor == BLACK ){
+
+        }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Pawn{" +
+                "x=" + x +
+                ", y=" + y +
+                ", pieceColor=" + pieceColor +
+                '}';
     }
 
     public Piece promoteTo(){

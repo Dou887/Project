@@ -21,17 +21,15 @@ public abstract class AbstractPiece implements Piece {
         this.moved = moved;
     }
 
-    public boolean isEnemy(Board board, Point endSquare){
-        if(pieceColor!= board.getColorAt(endSquare.x, endSquare.y) &&
-                board.getColorAt(endSquare.x, endSquare.y) != NONE){
-            return true;
-        }
-        return false;
-    }
-
     @Override
     public PieceType type() {
         return pieceType;
+    }
+
+    @Override
+    public void setMoved() {
+        this.moved = true;
+
     }
 
     @Override

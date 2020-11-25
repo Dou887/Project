@@ -17,5 +17,8 @@ public interface Piece {
 
     boolean moved();
 
+    boolean isValidMove(Point endSquare);
+
+    void setMoved();
     PieceType type();
 }

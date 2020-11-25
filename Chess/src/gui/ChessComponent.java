@@ -22,7 +22,6 @@ public class ChessComponent extends JComponent {
     public ChessComponent(final Board board) {
         this.board = board;
         this.loadImage();
-
     }
 
     public void loadImage() {
@@ -94,7 +93,6 @@ public class ChessComponent extends JComponent {
                 put(BLACK, blackBishop);
             }
         });
-
     }
 
     public Dimension getPreferredSize() {
@@ -116,8 +114,9 @@ public class ChessComponent extends JComponent {
         }
         for (int x = 0; x < board.getWidth(); x++) {
             for (int y = 0; y < board.getHeight(); y++) {
-                if (board.getSquareAt(x, y) != EMPTY) {
-                    pieceMap.get(board.getSquareAt(x, y)).get(board.getColorAt(x, y)).
+                Point temp = new Point(x,y);
+                if (board.getSquareAt(temp) != EMPTY) {
+                    pieceMap.get(board.getSquareAt(temp)).get(board.getColorAt(temp)).
                             paintIcon(this, g, x * SIZE, y * SIZE);
                 }
             }

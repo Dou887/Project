@@ -2,23 +2,24 @@ package player;
 
 public class HumanPlayer implements Player {
     private int matchesPlayed;
-
+    private int wins;
+    private int loses;
 
     public HumanPlayer(String name) {
 
     }
-
-    public void makeMove(){
+    @Override
+    public void setWins() {
 
     }
 
-    public void setWins(int wins) {
+    @Override
+    public void setLoses() {
+
     }
 
-    public void setDraw(int draw) {
-    }
+    @Override
+    public void setDraw() {
 
-    public void setLosses(int losses) {
     }
-
 }
