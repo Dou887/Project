@@ -1,5 +1,12 @@
 package pieces;
 
+import main.Board;
+
+import java.awt.*;
+import java.util.Vector;
+
+import static pieces.PieceType.KNIGHT;
+
 public abstract class AbstractPiece implements Piece {
 
     protected int x;
@@ -7,12 +14,62 @@ public abstract class AbstractPiece implements Piece {
     protected final PieceColor pieceColor;
     protected boolean moved;
     protected PieceType pieceType;
+    protected Vector<Point> possibleMoves = new Vector<Point>();
 
     public AbstractPiece(PieceColor pieceColor, int x, int y, boolean moved) {
         this.x = x;
         this.y = y;
         this.pieceColor = pieceColor;
         this.moved = moved;
+    }
+
+    public Vector<Point> squaresAttacked(Board board){
+        possibleMoves.clear();
+        for(int x = 0; x<8; x++){
+            for (int y= 0; y <8; y++){
+                Point temp = new Point(x,y);
+                if(this.isValidMove(temp) && !pathBlocked(board,temp)){
+                    if(board.isEmpty(temp)){
+                        possibleMoves.add(temp);
+                    }
+                    else if(board.getSquare(temp).color() != this.color()){
+                        possibleMoves.add(temp);
+                    }
+                }
+            }
+        }
+        return possibleMoves;
+    }
+
+    public boolean pathBlocked(Board board, Point endSquare){
+        int dirY = y < endSquare.y ? 1 : -1;
+        int dirX = x < endSquare.x ? 1 : -1;
+
+        if (board.getSquareAt(new Point(x,y)) == KNIGHT) {
+            return false;
+        }
+        if (endSquare.x - x == 0) {
+            for (int i = 1; i < Math.abs(y - endSquare.y); i++) {
+                if (!board.isEmpty(new Point(x, y + i * dirY))) {
+                    return true;
+                }
+            }
+        }
+        if (endSquare.y - y == 0) {
+            for (int i = 1; i < Math.abs(x - endSquare.x); i++) {
+                if (!board.isEmpty(new Point(x + i * dirX, y))) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            for (int i = 1; i < Math.abs(x - endSquare.x); i++) {
+                if (!board.isEmpty(new Point(x + i * dirX, y + i * dirY))) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override

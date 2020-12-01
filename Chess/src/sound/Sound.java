@@ -1,16 +1,22 @@
 package sound;
 
 import javax.sound.sampled.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-public class sound {
+public class Sound {
 
     private Clip clip;
-    public sound(String soundFile) {
+    public Sound() {
         try {
             // Use URL (instead of File) to read from disk and JAR.
-            URL url = this.getClass().getResource(soundFile);
+
+            //URL url = this.getClass().getClassLoader().getResource("w.wav");
+
+            URL url = new File("/full/path/to/w.wav").toURI().toURL();
+            System.out.println(url.toString());
+            System.out.println(url.getPath());
             // Set up an audio input stream piped from the sound file.
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(url);
             // Get a clip resource.

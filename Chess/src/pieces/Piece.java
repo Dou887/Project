@@ -1,6 +1,9 @@
 package pieces;
 
+import main.Board;
+
 import java.awt.*;
+import java.util.Vector;
 
 public interface Piece {
     int getX();
@@ -16,6 +19,8 @@ public interface Piece {
     boolean moved();
 
     boolean isValidMove(Point endSquare);
+
+    Vector<Point> squaresAttacked(Board board);
 
     void setMoved();
     PieceType type();

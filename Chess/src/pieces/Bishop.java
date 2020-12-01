@@ -1,6 +1,10 @@
 package pieces;
 
+import main.Board;
+
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Vector;
 
 public class Bishop extends AbstractPiece {
 
@@ -13,6 +17,8 @@ public class Bishop extends AbstractPiece {
         return deltaX == deltaY;
 
     }
+
+
 
     public PieceType type(){
         return PieceType.BISHOP;

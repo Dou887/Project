@@ -1,6 +1,9 @@
 package pieces;
 
+import main.Board;
+
 import java.awt.*;
+import java.util.Vector;
 
 import static pieces.PieceColor.BLACK;
 
@@ -33,6 +36,13 @@ public class Pawn extends AbstractPiece {
     }
 
     @Override
+    public Vector<Point> squaresAttacked(Board board) {
+        for ()
+        return super.squaresAttacked(board);
+
+    }
+
+    @Override
     public int getX() {
         return super.getX();
     }
@@ -57,12 +67,6 @@ public class Pawn extends AbstractPiece {
         return super.color();
     }
 
-    public boolean isPromoting(){
-        if(this.pieceColor == BLACK ){
-
-        }
-        return false;
-    }
 
     @Override
     public String toString() {

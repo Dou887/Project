@@ -5,19 +5,24 @@ import pieces.Piece;
 
 import player.HumanPlayer;
 import player.Player;
+import sound.Sound;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import static pieces.PieceColor.BLACK;
 import static pieces.PieceColor.WHITE;
-
-public class Game {
+public class Game  {
 
     private final List<Move> movesPlayed;
     private final Player[] players;
     private Player playerInTurn;
     private Board board;
+    private Point startSquare = null;
+    private Point endSquare = null;
 
     public Game() {
         this.movesPlayed = new ArrayList<>();
@@ -34,7 +39,8 @@ public class Game {
         players[0] = player1;
         players[1] = player2;
         playerInTurn = players[0];
-
+        player1.setPieceColor(WHITE);
+        player2.setPieceColor(BLACK);
 
     }
 
@@ -57,32 +63,29 @@ public class Game {
             return false;
         }
         // check if the right player is making a move
-
-        if(player != playerInTurn && sourcePiece.color()==WHITE){
+        if(playerInTurn.getPieceColor() != sourcePiece.color()){
             System.out.println("wrong dude");
             return false;
         }
-
-
         if(move.isCastlingMove()){
-
             move.setCastlingMove();
+
         }
         if(!move.isValidMove()){
-
             return false;
         }
-
         move.piece(move.getStartSquare(), move.getEndSquare());
-
+        movesPlayed.add(move);
+        playerInTurn = playerInTurn == players[0] ? players[1] : players[0];
         if(move.isPawnPromoting()){
-
             move.setPawnPromoting();
+
         }
 
-        playerInTurn = playerInTurn == players[0] ? players[1] : players[0];
-        return false;
+        System.out.println(playerInTurn);
+        return true;
     }
+
 
     public static void main(String[] args) {
         boolean running = true;
