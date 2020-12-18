@@ -24,6 +24,7 @@ public class ChessComponent extends JComponent implements MouseListener {
     private final Color darkSquare = new Color(178, 128, 54);
     private Point startSquare = null;
     private Point endSquare = null;
+    private String alpha = "abcdefgh";
 
     public ChessComponent(final Game game) {
         this.game = game;
@@ -103,7 +104,7 @@ public class ChessComponent extends JComponent implements MouseListener {
     }
 
     public Dimension getPreferredSize() {
-        return new Dimension((game.getBoard().getWidth()) * 2 * SIZE + 5, (game.getBoard().getHeight()) * SIZE);
+        return new Dimension((game.getBoard().getWidth()) * 2 * SIZE , (game.getBoard().getHeight()) * SIZE);
     }
 
     @Override
@@ -113,10 +114,29 @@ public class ChessComponent extends JComponent implements MouseListener {
 
         for (int x = 0; x < game.getBoard().getWidth(); x++) { // Compensate for OUTSIDE borders
             for (int y = 0; y < game.getBoard().getHeight(); y++) {
-                Color color = ((x + y) % 2 == 0) ? lightSquare : darkSquare;
-                g2d.setColor(color);
+                Color color1 = ((x + y) % 2 == 0) ? lightSquare : darkSquare;
+
+                g2d.setColor(color1);
                 g2d.drawRect(x * SIZE, y * SIZE, SIZE, SIZE);
                 g2d.fillRect(x * SIZE, y * SIZE, SIZE, SIZE);
+                if(x==0){
+                    Color color2 = (y % 2 == 0) ? darkSquare: lightSquare;
+                    g2d.setColor(color2);
+                    Font font = new Font("arial", Font.BOLD,18);
+                    g2d.setFont(font);
+                    g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+                    g2d.drawString(String.valueOf(y+1),x * SIZE, (y+1) * SIZE-42);
+                }
+                if(y==7){
+                    Color color2 = (x % 2 == 0) ? lightSquare: darkSquare;
+
+                    g2d.setColor(color2);
+
+                    Font font = new Font("arial", Font.BOLD,18);
+                    g2d.setFont(font);
+                    g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+                    g2d.drawString(String.valueOf(alpha.charAt(x)),(x) * SIZE+45,(y+1) * SIZE);
+                }
             }
         }
         if(startSquare != null && game.getBoard().getSquare(startSquare).color() ==
@@ -124,14 +144,6 @@ public class ChessComponent extends JComponent implements MouseListener {
             g2d.setColor(new Color(0,102,0,150));
             g2d.drawRect(startSquare.x * SIZE, startSquare.y * SIZE, SIZE, SIZE);
             g2d.fillRect(startSquare.x * SIZE, startSquare.y * SIZE, SIZE, SIZE);
-
-            Vector<Point> vector = game.getBoard().getSquare(startSquare).squaresAttacked(game.getBoard());
-            for (Point point : vector){
-                System.out.println(point);
-                g2d.setColor(new Color(0,0,150,150));
-                g2d.drawRect(point.x * SIZE, point.y * SIZE, SIZE, SIZE);
-                g2d.fillRect(point.x * SIZE, point.y * SIZE, SIZE, SIZE);
-            }
         }
         for (int x = 0; x < game.getBoard().getWidth(); x++) {
             for (int y = 0; y < game.getBoard().getHeight(); y++) {
@@ -143,8 +155,8 @@ public class ChessComponent extends JComponent implements MouseListener {
             }
         }
         g2d.setColor(Color.BLACK);
-        g2d.drawRect(8 * SIZE, 0, 5, 8 * SIZE);
-        g2d.fillRect(8 * SIZE, 0, 5, 8 * SIZE);
+        g2d.drawRect(8 * SIZE, 0, 2, 8 * SIZE+20);
+        g2d.fillRect(8 * SIZE, 0, 2, 8 * SIZE+20);
 
     }
 

@@ -1,4 +1,5 @@
 package main;
+import pieces.King;
 import pieces.Piece;
 import pieces.PieceColor;
 import pieces.Queen;
@@ -14,6 +15,7 @@ public class Move {
     private final Point endSquare;
     private Piece pieceKilled;
     private final Board board;
+    private Piece restorePiece;
 
 
     public Move(Board board, Player player, Point startSquare, Point endSquare) {
@@ -24,6 +26,10 @@ public class Move {
 
     }
 
+    public void setPieceKilled(Piece pieceKilled) {
+        this.pieceKilled = pieceKilled;
+    }
+
     public Point getStartSquare() {
         return startSquare;
     }
@@ -32,9 +38,10 @@ public class Move {
         return endSquare;
     }
 
-    public boolean sameParti(){
-        if(getSourcePiece() != null && getDestPiece() != null){
-            return getSourcePiece().color() == getDestPiece().color();}
+    public boolean sameParti(Point startSquare, Point endSquare){
+        if(!board.isEmpty(startSquare) && !board.isEmpty(endSquare)){
+            return board.getColorAt(startSquare) == board.getColorAt(endSquare);
+        }
         return false;
     }
 
@@ -70,31 +77,39 @@ public class Move {
     }
 
     public void piece(Point startSquare, Point endSquare){
-        if(board.getSquare(endSquare) != null){
-            pieceKilled = board.getSquare(endSquare);
+        if(board.getSquare(startSquare) != null) {
+            board.getSquare(startSquare).setX(endSquare.x);
+            board.getSquare(startSquare).setY(endSquare.y);
+            board.getSquare(startSquare).setMoved();
+            board.movePiece(startSquare, endSquare);
+            board.setPiece(null, startSquare);
         }
-        board.getSquare(startSquare).setX(endSquare.x);
-        board.getSquare(startSquare).setY(endSquare.y);
-        board.getSquare(startSquare).setMoved();
-        board.movePiece(startSquare, endSquare);
-        board.setPiece(null, startSquare);
     }
 
     public boolean isCastlingMove(){
         if(board.getSquareAt(startSquare) == KING && !board.getSquare(startSquare).moved() &&
             startSquare.y == endSquare.y && Math.abs(startSquare.x- endSquare.x) == 2){
-            // Pieces has not moved yet
-
             boolean rightRook = endSquare.x>4;
-            int num1 = rightRook ? 1 : -2;
-            int num2 = rightRook ? 1 : -1;
+            int num1 = rightRook ? 1 : -2;int num2 = rightRook ? 1 : -1;
             Point sideOfKing = new Point(startSquare.x+num2, startSquare.y);
             Point rookSquare = new Point(endSquare.x+num1, endSquare.y);
+            return !board.getSquare(rookSquare).moved() && !pathBlocked(rookSquare, startSquare) &&
+                        !squareAttacked(sideOfKing,WHITE) && !squareAttacked(endSquare,WHITE);
+            }
+        return false;
+    }
+    public boolean squareAttacked(Point endSquare, PieceColor playerColor){
+            for (int x = 0; x < board.getWidth(); x++) {
+                for (int y = 0; y < board.getHeight(); y++) {
+                    Point startSquare = new Point(x, y);
+                    if (!board.isEmpty(startSquare)) {
+                        if (!sameParti(startSquare,endSquare) && isValidMove(startSquare, endSquare)) {
+                            return true;
+                        }
+                    }
+                }
+            }
 
-            System.out.println(!board.getSquare(rookSquare).moved());
-            System.out.println(!pathBlocked(rookSquare, endSquare));
-            return !board.getSquare(rookSquare).moved() && !pathBlocked(rookSquare, startSquare);
-        }
         return false;
     }
 
@@ -109,10 +124,10 @@ public class Move {
         System.out.println(new Point(endSquare.x+num1, endSquare.y));
         board.movePiece(rookSquare, sideOfKing);
     }
-    public boolean isPawnAttack(){
-        if(board.getSquareAt(startSquare) == PAWN && getSourcePiece() != null && getDestPiece() != null){
-            if(getSourcePiece().color() != getDestPiece().color()){
-                int num = getSourcePiece().color() == WHITE ? 1 : -1;
+    public boolean isPawnAttack(Point startSquare, Point endSquare){
+        if(board.getSquareAt(startSquare) == PAWN){
+            if(!sameParti(startSquare,endSquare)){
+                int num = board.getColorAt(startSquare) == WHITE ? 1 : -1;
                 return startSquare.y - endSquare.y == num && Math.abs(endSquare.x - startSquare.x) == 1;
             }
         }
@@ -130,13 +145,17 @@ public class Move {
         board.setPiece(piece, endSquare);
     }
 
-    public boolean isValidMove(){
-        if (board.getSquareAt(startSquare) == PAWN){
-            return getDestPiece() == null ? this.getSourcePiece().isValidMove(endSquare) : isPawnAttack();
+    public boolean isValidMove(Point startSquare, Point endSquare){
+        if(board.getSquare(startSquare) == null){
+            return false;
         }
-        else if(getSourcePiece() != null){
-            return this.getSourcePiece().isValidMove(endSquare) && !pathBlocked(startSquare, endSquare) && !sameParti();
-
+        if (board.getSquareAt(startSquare) == PAWN){
+            return board.getSquare(endSquare) == null ? board.getSquare(startSquare).isValidMove(endSquare)
+                    : isPawnAttack(startSquare,endSquare);
+        }
+        else if(!board.isEmpty(startSquare)){
+            return board.getSquare(startSquare).isValidMove(endSquare) && !pathBlocked(startSquare, endSquare)
+                    && !sameParti(startSquare,endSquare);
             }
         return false;
         }
@@ -150,56 +169,53 @@ public class Move {
         return board.getSquare(endSquare);
     }
 
-    public boolean canAttack(Point startSquare, Point endSquare){
-        Piece piece = board.getSquare(startSquare);
-        Point piecePoint = new Point(piece.getX(), piece.getY());
-        return piece.isValidMove(endSquare) && !pathBlocked(piecePoint, endSquare);
-    }
-
-    public boolean isCheckMate(PieceColor color){
+    public boolean isCheckMate(PieceColor playerColor){
+        boolean isCheckMate = true;
         for(int x1 = 0; x1< board.getWidth();x1++) {
             for (int y1 = 0; y1 < board.getHeight(); y1++) {
-                for (int x = 0; x < board.getWidth(); x++) {
-                    for (int y = 0; y < board.getHeight(); y++) {
-                        Point startSquare = new Point(x1,y1);
-                        Point endSquare = new Point(x,y);
-                        if(board.getSquare(startSquare).isValidMove(endSquare) && !pathBlocked(startSquare, endSquare)){
-                            this.piece(startSquare, endSquare);
-                            if(!isCheck(color)){
-                                this.piece(endSquare, startSquare);
-                                board.setPiece(pieceKilled,endSquare);
-                                return true;
+                Point startSquare = new Point(x1,y1);
+                if(!board.isEmpty(startSquare)) {
+                    if(board.getColorAt(startSquare) == playerColor){
+                        for (int x = 0; x < board.getWidth(); x++) {
+                            for (int y = 0; y < board.getHeight(); y++){
+                                Point endSquare = new Point(x,y);
+                                if (isValidMove(startSquare,endSquare)){
+                                    restorePiece = board.getSquare(endSquare);
+                                    piece(startSquare, endSquare);
+                                    if (!isCheck(playerColor)) {
+
+                                        isCheckMate = false;
+                                    }
+                                    piece(endSquare, startSquare);
+                                    board.setPiece(restorePiece, endSquare);
+                                }
                             }
-                            this.piece(endSquare, startSquare);
-                            board.setPiece(pieceKilled,endSquare);
                         }
                     }
                 }
             }
         }
+        return isCheckMate;
+    }
+    public boolean selfCheck(PieceColor color){
+        if(isCheck(color)){
+            piece(endSquare,startSquare);
+            board.setPiece(pieceKilled,endSquare);
+            return true;
+        }
         return false;
     }
 
-    public boolean isCheck(PieceColor color){
+    public boolean isCheck(PieceColor playerColor){
         Point kingPos = null;
-        for(int x1 = 0; x1< board.getWidth();x1++){
-            for (int y1 =0; y1< board.getHeight();y1++){
-                if(board.getColorAt(new Point(x1,y1)) == color && board.getSquareAt(new Point(x1,y1)) == KING){
-                    kingPos = new Point(x1,y1);
+        for(int x1 = 0; x1< board.getWidth();x1++) {
+            for (int y1 = 0; y1 < board.getHeight(); y1++) {
+                if (board.getColorAt(new Point(x1, y1)) == playerColor && board.getSquareAt(new Point(x1, y1)) == KING) {
+                    kingPos = new Point(x1, y1);
                     break;
                 }
             }
         }
-        for(int x = 0; x< board.getWidth();x++) {
-            for (int y = 0; y < board.getHeight(); y++) {
-                Point start = new Point(x,y);
-                if(board.getSquare(start).color() != color){
-                    if(canAttack(start,kingPos)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+        return squareAttacked(kingPos, playerColor);
     }
 }

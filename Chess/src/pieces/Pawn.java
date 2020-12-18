@@ -8,9 +8,14 @@ import java.util.Vector;
 import static pieces.PieceColor.BLACK;
 
 public class Pawn extends AbstractPiece {
+    private int value = 1;
 
     public Pawn(PieceColor pieceColor, int x, int y, boolean moved) {
         super(pieceColor,x,y,moved);
+    }
+
+    public int getValue() {
+        return value;
     }
 
     @Override
@@ -29,18 +34,36 @@ public class Pawn extends AbstractPiece {
 
     @Override
     public boolean isValidMove(Point endSquare) {
-        return !moved ? pieceColor == BLACK ? endSquare.x == x && endSquare.y - y < 3 :
-                endSquare.x == x && y - endSquare.y < 3 :
-                pieceColor == BLACK ? endSquare.x == x && endSquare.y - y == 1 :
-                        endSquare.x == x && y - endSquare.y == 1;
+        if(endSquare != null) {
+            return !moved ? pieceColor == BLACK ? endSquare.x == x && endSquare.y - y < 3 && endSquare.y - y > 0 :
+                    endSquare.x == x && y - endSquare.y < 3 && y - endSquare.y > 0 :
+                    // has moved
+                    pieceColor == BLACK ? endSquare.x == x && endSquare.y - y == 1 :
+                            endSquare.x == x && y - endSquare.y == 1;
+        }
+        return false;
     }
 
     @Override
     public Vector<Point> squaresAttacked(Board board) {
-        for ()
-        return super.squaresAttacked(board);
+        Vector<Point> possibleMoves = new Vector<>();
+        int dir = pieceColor == BLACK ? 1 : -1;
+        if(!board.isEmpty(new Point(x-1, y+dir))){
+            if(board.getSquare(new Point(x-1,y+dir) ).color() != this.pieceColor){
+                possibleMoves.add(new Point (x-1,y+dir));
+            }
+        }
+        if(!board.isEmpty(new Point(x+1, y+dir))) {
+            if (board.getSquare(new Point(x + 1, y + dir)).color() != this.pieceColor) {
+                possibleMoves.add(new Point(x + 1, y + dir));
+            }
+        }
+        possibleMoves.addAll(super.squaresAttacked(board));
+        return possibleMoves;
 
     }
+
+
 
     @Override
     public int getX() {

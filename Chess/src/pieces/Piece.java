@@ -20,8 +20,6 @@ public interface Piece {
 
     boolean isValidMove(Point endSquare);
 
-    Vector<Point> squaresAttacked(Board board);
-
     void setMoved();
     PieceType type();
 }

@@ -47,7 +47,7 @@ public class Board {
     }
 
     /**
-     * Method is only used for pawn promotion
+     *
      */
     public void setPiece(Piece piece, Point coord){
         square[coord.x][coord.y] = piece;
@@ -61,6 +61,9 @@ public class Board {
     }
 
     public boolean isEmpty(Point coord){
+        if(outOfBounds(coord)){
+            return true;
+        }
         return square[coord.x][coord.y] == null;
     }
 

@@ -3,16 +3,22 @@ package pieces;
 import java.awt.*;
 
 public class Rook extends AbstractPiece {
+    private int value = 5;
     public Rook(PieceColor pieceColor, int x, int y, boolean moved) {
         super(pieceColor,x,y,moved);
     }
 
+    public int getValue() {
+        return value;
+    }
 
     @Override
     public boolean isValidMove(Point endSquare) {
+        if(endSquare == null){
+            return false;
+        }
         return (x == endSquare.x) ^ (y == endSquare.y);
     }
-
     public PieceType type(){
         return PieceType.ROOK;
     }

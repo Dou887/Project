@@ -6,6 +6,7 @@ import java.awt.*;
 import java.util.Vector;
 
 import static pieces.PieceType.KNIGHT;
+import static pieces.PieceType.PAWN;
 
 public abstract class AbstractPiece implements Piece {
 
@@ -14,7 +15,8 @@ public abstract class AbstractPiece implements Piece {
     protected final PieceColor pieceColor;
     protected boolean moved;
     protected PieceType pieceType;
-    protected Vector<Point> possibleMoves = new Vector<Point>();
+    protected Vector<Point> possibleMoves = new Vector<>();
+    protected Vector<Point> forcedMoves = new Vector<>();
 
     public AbstractPiece(PieceColor pieceColor, int x, int y, boolean moved) {
         this.x = x;
@@ -24,6 +26,9 @@ public abstract class AbstractPiece implements Piece {
     }
 
     public Vector<Point> squaresAttacked(Board board){
+        if(!forcedMoves.isEmpty()){
+            possibleMoves = forcedMoves;
+        }
         possibleMoves.clear();
         for(int x = 0; x<8; x++){
             for (int y= 0; y <8; y++){
@@ -32,13 +37,23 @@ public abstract class AbstractPiece implements Piece {
                     if(board.isEmpty(temp)){
                         possibleMoves.add(temp);
                     }
-                    else if(board.getSquare(temp).color() != this.color()){
+                    else if(board.getSquare(temp).color() != this.color() &&
+                            board.getSquareAt(new Point(this.x,this.y)) != PAWN ){
                         possibleMoves.add(temp);
                     }
                 }
             }
         }
         return possibleMoves;
+    }
+
+    public void validForcedMove(Point coord){
+        if(coord != null) {
+            forcedMoves.add(coord);
+        }
+    }
+    public Vector<Point> printForcedMove(){
+        return forcedMoves;
     }
 
     public boolean pathBlocked(Board board, Point endSquare){
